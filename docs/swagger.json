@@ -1,0 +1,557 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "info service",
+        "title": "Vet clinic info service",
+        "contact": {},
+        "version": "0.1"
+    },
+    "basePath": "/info/v1/",
+    "paths": {
+        "/owner/create": {
+            "post": {
+                "description": "Creating owner with fullname, email, phone and password",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "owner"
+                ],
+                "summary": "Create owner",
+                "parameters": [
+                    {
+                        "description": "Owner credentials",
+                        "name": "input",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.Owner"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Successfully created",
+                        "schema": {
+                            "$ref": "#/definitions/models.Owner"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid input body",
+                        "schema": {
+                            "$ref": "#/definitions/models.ErrorDTO"
+                        }
+                    },
+                    "409": {
+                        "description": "owner with same email already exists",
+                        "schema": {
+                            "$ref": "#/definitions/models.ErrorDTO"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/models.ErrorDTO"
+                        }
+                    }
+                }
+            }
+        },
+        "/owner/get/{id}": {
+            "get": {
+                "description": "Get owner's information by his ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "owner"
+                ],
+                "summary": "Get owner",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "type": "integer",
+                        "description": "Owner ID"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully retrieved owner",
+                        "schema": {
+                            "$ref": "#/definitions/models.Owner"
+                        }
+                    },
+                    "404": {
+                        "description": "Owner not found",
+                        "schema": {
+                            "$ref": "#/definitions/models.ErrorDTO"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/models.ErrorDTO"
+                        }
+                    }
+                }
+            }
+        },
+        "/owner/get": {
+            "get": {
+                "description": "Get all owners information",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "owner"
+                ],
+                "summary": [
+                    "Get all owners"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully retrieved owners",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Owner"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/models.ErrorDTO"
+                        }
+                    }
+                }
+            }
+        },
+        "/owner/update/{id}": {
+            "put": {
+                "description": "Update owner details by ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "owner"
+                ],
+                "summary": "Update owner",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "type": "integer",
+                        "description": "Owner ID"
+                    },
+                    {
+                        "description": "Owner credentials",
+                        "name": "input",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.Owner"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully retrieved owner",
+                        "schema": {
+                            "$ref": "#/definitions/models.Owner"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid input body",
+                        "schema": {
+                            "$ref": "#/definitions/models.ErrorDTO"
+                        }
+                    },
+                    "404": {
+                        "description": "Owner not found",
+                        "schema": {
+                            "$ref": "#/definitions/models.ErrorDTO"
+                        }
+                    },
+                    "409": {
+                        "description": "owner with same email already exists не работает",
+                        "schema": {
+                            "$ref": "#/definitions/models.ErrorDTO"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/models.ErrorDTO"
+                        }
+                    }
+                }
+            }
+        },
+        "/owner/delete/{id}": {
+            "delete": {
+                "description": "Delete owner by his ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "owner"
+                ],
+                "summary": "Delete owner",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "type": "integer",
+                        "description": "Owner ID"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully deleted owner",
+                        "schema": {
+                            "$ref": "#/definitions/models.Owner"
+                        }
+                    },
+                    "404": {
+                        "description": "Owner not found",
+                        "schema": {
+                            "$ref": "#/definitions/models.ErrorDTO"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/models.ErrorDTO"
+                        }
+                    }
+                }
+            }
+        },
+        "/pet/create": {
+            "post": {
+                "description": "Creating pet with full info",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "pet"
+                ],
+                "summary": "Create pet",
+                "parameters": [
+                    {
+                        "description": "Pet credentials",
+                        "name": "input",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.Pet"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Successfully created",
+                        "schema": {
+                            "$ref": "#/definitions/models.Pet"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid input body",
+                        "schema": {
+                            "$ref": "#/definitions/models.ErrorDTO"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/models.ErrorDTO"
+                        }
+                    }
+                }
+            }
+        },
+        "/pet/get/{id}": {
+            "get": {
+                "description": "Get pet's information by his ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "pet"
+                ],
+                "summary": "Get pet",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "type": "integer",
+                        "description": "pet ID"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully retrieved pet",
+                        "schema": {
+                            "$ref": "#/definitions/models.Pet"
+                        }
+                    },
+                    "404": {
+                        "description": "pet not found",
+                        "schema": {
+                            "$ref": "#/definitions/models.ErrorDTO"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/models.ErrorDTO"
+                        }
+                    }
+                }
+            }
+        },
+        "/pet/get": {
+            "get": {
+                "description": "Get all pets information",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "pet"
+                ],
+                "summary": [
+                    "Get all pets"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully retrieved pets",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Pet"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/models.ErrorDTO"
+                        }
+                    }
+                }
+            }
+        },
+        "/pet/update/{id}": {
+            "put": {
+                "description": "Update pet details by ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "pet"
+                ],
+                "summary": "Update pet",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "type": "integer",
+                        "description": "pet ID"
+                    },
+                    {
+                        "description": "Pet credentials",
+                        "name": "input",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.Pet"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully retrieved pet",
+                        "schema": {
+                            "$ref": "#/definitions/models.Pet"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid input body",
+                        "schema": {
+                            "$ref": "#/definitions/models.ErrorDTO"
+                        }
+                    },
+                    "404": {
+                        "description": "pet not found",
+                        "schema": {
+                            "$ref": "#/definitions/models.ErrorDTO"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/models.ErrorDTO"
+                        }
+                    }
+                }
+            }
+        },
+        "/pet/delete/{id}": {
+            "delete": {
+                "description": "Delete pet by it ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "pet"
+                ],
+                "summary": "Delete pet",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "type": "integer",
+                        "description": "pet ID"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully deleted pet",
+                        "schema": {
+                            "$ref": "#/definitions/models.Pet"
+                        }
+                    },
+                    "404": {
+                        "description": "pet not found",
+                        "schema": {
+                            "$ref": "#/definitions/models.ErrorDTO"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/models.ErrorDTO"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "models.ErrorDTO": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.Owner": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "fullname": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "password": {
+                    "description": "password hash",
+                    "type": "string"
+                },
+                "phone": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.Pet": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "description": "Unique identifier for the pet"
+                },
+                "animal_type": {
+                    "type": "string",
+                    "description": "Type of animal, e.g., dog, cat"
+                },
+                "name": {
+                    "type": "string",
+                    "description": "Name of the pet"
+                },
+                "gender": {
+                    "type": "string",
+                    "description": "Gender of the pet",
+                    "nullable": true
+                },
+                "age": {
+                    "type": "integer",
+                    "description": "Age of the pet",
+                    "nullable": true
+                },
+                "weight": {
+                    "type": "number",
+                    "format": "float",
+                    "description": "Weight of the pet in kilograms",
+                    "nullable": true
+                },
+                "condition": {
+                    "type": "string",
+                    "description": "Current health condition of the pet",
+                    "nullable": true
+                },
+                "behavior": {
+                    "type": "string",
+                    "description": "Behavioral traits of the pet",
+                    "nullable": true
+                },
+                "research_status": {
+                    "type": "string",
+                    "description": "Status in any ongoing research",
+                    "nullable": true
+                }
+            }
+        }
+    }
+}
