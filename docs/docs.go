@@ -194,7 +194,7 @@ const docTemplate = `{
                         }
                     },
                     "409": {
-                        "description": "owner with same email already exists не работает",
+                        "description": "owner with same email already exists",
                         "schema": {
                             "$ref": "#/definitions/models.ErrorDTO"
                         }
