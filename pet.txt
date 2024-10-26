@@ -1,0 +1,11 @@
+{
+    "id": 1,
+    "animal_type": "dog",
+    "name": "Buddy",
+    "gender": "male",
+    "age": 5,
+    "weight": 20.5,
+    "condition": "healthy",
+    "behavior": "friendly",
+    "research_status": "none"
+}
