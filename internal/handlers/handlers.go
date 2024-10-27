@@ -20,7 +20,7 @@ func NewHandler(log *logging.Logger, service *service.Service) *Handler {
 }
 
 func (h *Handler) InitRoutes() *gin.Engine {
-	router := gin.New()
+	router := gin.Default()
 	router.Use(cors.New(cors.Config{
 		AllowAllOrigins:  true,
 		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
@@ -38,19 +38,19 @@ func (h *Handler) InitRoutes() *gin.Engine {
 		{
 			pet := v1.Group("/pet")
 			{
-				pet.POST("/create", h.createPet)
-				pet.GET("/get", h.getAllPets)
-				pet.GET("/get/:id", h.getPet)
-				pet.PUT("/update/:id", h.updatePet)
-				pet.DELETE("/delete/:id", h.deletePet)
+				pet.POST("/", h.createPet)
+				pet.GET("/", h.getAllPets)
+				pet.GET("/:id", h.getPet)
+				pet.PUT("/:id", h.updatePet)
+				pet.DELETE("/:id", h.deletePet)
 			}
 			owner := v1.Group("/owner")
 			{
-				owner.POST("/create", h.createOwner)
-				owner.GET("/get/:id", h.getOwner)
-				owner.GET("/get", h.getAllOwners)
-				owner.PUT("/update/:id", h.updateOwner)
-				owner.DELETE("/delete/:id", h.deleteOwner)
+				owner.POST("/", h.createOwner)
+				owner.GET("/:id", h.getOwner)
+				owner.GET("/", h.getAllOwners)
+				owner.PUT("/:id", h.updateOwner)
+				owner.DELETE("/:id", h.deleteOwner)
 			}
 		}
 	}

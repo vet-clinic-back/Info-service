@@ -16,12 +16,12 @@ import (
 // @Tags owners
 // @Accept json
 // @Produce json
-// @Param input body models.owner true "owner details"
+// @Param input body models.Owner true "owner details"
 // @Success 201 {object} models.Owner "Successfully created owner"
 // @Failure 400 {object} models.ErrorDTO "Invalid input body"
 // @Failure 409 {object} models.ErrorDTO "Owner with same email already exists"
 // @Failure 500 {object} models.ErrorDTO "Internal server error"
-// TODO// @Router /owner/create [post]
+// @Router /info/v1/owner/ [post]
 func (h *Handler) createOwner(c *gin.Context) {
 	op := "Handler.createOwner"
 	log := h.log.WithField("op", op)
@@ -79,7 +79,7 @@ func (h *Handler) createOwner(c *gin.Context) {
 // @Success 200 {object} models.Owner "Successfully retrieved owner"
 // @Failure 404 {object} models.ErrorDTO "owner not found"
 // @Failure 500 {object} models.ErrorDTO "Internal server error"
-// @Router /owner/get/{id} [get]
+// @Router /info/v1/owner/{id} [get]
 func (h *Handler) getOwner(c *gin.Context) {
 	op := "Handler.getOwner"
 	log := h.log.WithField("op", op)
@@ -113,10 +113,9 @@ func (h *Handler) getOwner(c *gin.Context) {
 // @Description Get all owners details
 // @Tags owners
 // @Produce json
-// @Param
 // @Success 200 {object} models.Owner "Successfully retrieved owners"
 // @Failure 500 {object} models.ErrorDTO "Internal server error"
-// TODO// @Router  /owner/get [get]
+// @Router  /info/v1/owner [get]
 func (h *Handler) getAllOwners(c *gin.Context) {
 	op := "Handler.getAllOwners"
 	log := h.log.WithField("op", op)
@@ -145,7 +144,7 @@ func (h *Handler) getAllOwners(c *gin.Context) {
 // @Failure 404 {object} models.ErrorDTO "Owner not found"
 // @Failure 409 {object} models.ErrorDTO "Owner with same email already exists"
 // @Failure 500 {object} models.ErrorDTO "Internal server error"
-// @Router /owner/update/{id} [put]
+// @Router /info/v1/owner/{id} [put]
 func (h *Handler) updateOwner(c *gin.Context) {
 	op := "Handler.updateOwner"
 	log := h.log.WithField("op", op)
@@ -207,7 +206,7 @@ func (h *Handler) updateOwner(c *gin.Context) {
 // @Success 200 {object} models.Owner "Successfully deleted owner"
 // @Failure 404 {object} models.ErrorDTO "owner not found"
 // @Failure 500 {object} models.ErrorDTO "Internal server error"
-// @Router /owner/delete/{id} [delete]
+// @Router /info/v1/owner/{id} [delete]
 func (h *Handler) deleteOwner(c *gin.Context) {
 	op := "Handler.deleteOwner"
 	log := h.log.WithField("op", op)
