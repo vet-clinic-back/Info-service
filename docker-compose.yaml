@@ -12,12 +12,12 @@ services:
       - ./CREATE_1.sql:/docker-entrypoint-initdb.d/init.sql
     ports:
       - "5432:5432"
-  app:
-    build: ./
-    volumes:
-      - .:/app
-    ports:
-      - 8080:8080
-    command: ["/main"]
-    depends_on:
-      - db
+  # app:
+  #   build: ./
+  #   volumes:
+  #     - .:/app
+  #   ports:
+  #     - 8080:8080
+  #   command: ["/main"]
+  #   depends_on:
+  #     - db

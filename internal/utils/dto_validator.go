@@ -18,7 +18,7 @@ func ValidateCreatingPetDTO(dto models.Pet) error {
 }
 
 func ValidateCreatingOwnerDTO(dto models.Owner) error {
-	if dto.FullName == "" || dto.Email == "" || dto.Phone == "" || dto.Password == "" {
+	if dto.FullName == "" || dto.Email == "" || dto.Phone == "" || dto.PasswordHash == "" {
 		return ErrInvalidInputBody
 	}
 	return nil

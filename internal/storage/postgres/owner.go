@@ -13,7 +13,7 @@ func (s *Storage) CreateOwner(owner models.Owner) (uint, error) {
 	query := fmt.Sprintf("INSERT INTO %s (full_name, email, phone, password_hash) VALUES ($1, $2, $3, $4) RETURNING id", ownersTable)
 
 	var id uint
-	err := s.db.QueryRow(query, owner.FullName, owner.Email, owner.Phone, owner.Password).Scan(&id)
+	err := s.db.QueryRow(query, owner.FullName, owner.Email, owner.Phone, owner.PasswordHash).Scan(&id)
 	if err != nil {
 		return 0, fmt.Errorf("failed to create owner: %w", err)
 	}
@@ -35,8 +35,8 @@ func (s *Storage) GetOwner(owner models.Owner) (models.Owner, error) {
 	if owner.Phone != "" {
 		stmt = stmt.Where(squirrel.Eq{"phone": owner.Phone})
 	}
-	if owner.Password != "" {
-		stmt = stmt.Where(squirrel.Eq{"password_hash": owner.Password})
+	if owner.PasswordHash != "" {
+		stmt = stmt.Where(squirrel.Eq{"password_hash": owner.PasswordHash})
 	}
 
 	query, args, err := stmt.ToSql()
@@ -95,11 +95,14 @@ func (s *Storage) UpdateOwner(owner models.Owner) (models.Owner, error) {
 	if owner.Email != "" {
 		stmt = stmt.Set("email", owner.Email)
 	}
+	if owner.FullName != "" {
+		stmt = stmt.Set("full_name", owner.FullName)
+	}
 	if owner.Phone != "" {
 		stmt = stmt.Set("phone", owner.Phone)
 	}
-	if owner.Password != "" {
-		stmt = stmt.Set("password_hash", owner.Password)
+	if owner.PasswordHash != "" {
+		stmt = stmt.Set("password_hash", owner.PasswordHash)
 	}
 
 	stmt = stmt.Where(squirrel.Eq{"id": owner.ID})

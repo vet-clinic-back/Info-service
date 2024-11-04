@@ -11,7 +11,7 @@ import (
 )
 
 // @Summary Create Pet
-// @Description Create a new pet in the system
+// @Description Create a new pet in the system. Age & weight should be > 0 & Gender should be 'Male' or 'Female'
 // @Tags pets
 // @Accept json
 // @Produce json

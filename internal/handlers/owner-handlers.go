@@ -182,7 +182,7 @@ func (h *Handler) updateOwner(c *gin.Context) {
 	log.Debug("updating owner")
 	updatedOwner, err := h.service.Info.UpdateOwner(input)
 	if err != nil {
-		if err == sql.ErrNoRows {
+		if errors.Is(err, sql.ErrNoRows) {
 			log.Error("owner not found: ", err.Error())
 			h.newErrorResponse(c, http.StatusNotFound, "owner not found")
 			return

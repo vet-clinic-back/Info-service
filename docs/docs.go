@@ -4,18 +4,46 @@ package docs
 import "github.com/swaggo/swag"
 
 const docTemplate = `{
+    "schemes": {{ marshal .Schemes }},
     "swagger": "2.0",
     "info": {
-        "description": "info service",
-        "title": "Vet clinic info service",
+        "description": "{{escape .Description}}",
+        "title": "{{.Title}}",
         "contact": {},
-        "version": "0.1"
+        "version": "{{.Version}}"
     },
-    "basePath": "/info/v1/",
+    "host": "{{.Host}}",
+    "basePath": "{{.BasePath}}",
     "paths": {
-        "/owner/create": {
+        "/info/v1/owner": {
+            "get": {
+                "description": "Get all owners details",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "owners"
+                ],
+                "summary": "Get all owners",
+                "responses": {
+                    "200": {
+                        "description": "Successfully retrieved owners",
+                        "schema": {
+                            "$ref": "#/definitions/models.Owner"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/models.ErrorDTO"
+                        }
+                    }
+                }
+            }
+        },
+        "/info/v1/owner/": {
             "post": {
-                "description": "Creating owner with fullname, email, phone and password",
+                "description": "Create a new owner in the system",
                 "consumes": [
                     "application/json"
                 ],
@@ -23,12 +51,12 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "owner"
+                    "owners"
                 ],
                 "summary": "Create owner",
                 "parameters": [
                     {
-                        "description": "Owner credentials",
+                        "description": "owner details",
                         "name": "input",
                         "in": "body",
                         "required": true,
@@ -39,7 +67,7 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "201": {
-                        "description": "Successfully created",
+                        "description": "Successfully created owner",
                         "schema": {
                             "$ref": "#/definitions/models.Owner"
                         }
@@ -51,7 +79,7 @@ const docTemplate = `{
                         }
                     },
                     "409": {
-                        "description": "owner with same email already exists",
+                        "description": "Owner with same email already exists",
                         "schema": {
                             "$ref": "#/definitions/models.ErrorDTO"
                         }
@@ -65,26 +93,23 @@ const docTemplate = `{
                 }
             }
         },
-        "/owner/get/{id}": {
+        "/info/v1/owner/{id}": {
             "get": {
-                "description": "Get owner's information by his ID",
-                "consumes": [
-                    "application/json"
-                ],
+                "description": "Get owner details by ID",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
-                    "owner"
+                    "owners"
                 ],
                 "summary": "Get owner",
                 "parameters": [
                     {
+                        "type": "integer",
+                        "description": "owner ID",
                         "name": "id",
                         "in": "path",
-                        "required": true,
-                        "type": "integer",
-                        "description": "Owner ID"
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -95,7 +120,7 @@ const docTemplate = `{
                         }
                     },
                     "404": {
-                        "description": "Owner not found",
+                        "description": "owner not found",
                         "schema": {
                             "$ref": "#/definitions/models.ErrorDTO"
                         }
@@ -107,43 +132,7 @@ const docTemplate = `{
                         }
                     }
                 }
-            }
-        },
-        "/owner/get": {
-            "get": {
-                "description": "Get all owners information",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "owner"
-                ],
-                "summary": [
-                    "Get all owners"
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Successfully retrieved owners",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/models.Owner"
-                            }
-                        }
-                    },
-                    "500": {
-                        "description": "Internal server error",
-                        "schema": {
-                            "$ref": "#/definitions/models.ErrorDTO"
-                        }
-                    }
-                }
-            }
-        },
-        "/owner/update/{id}": {
+            },
             "put": {
                 "description": "Update owner details by ID",
                 "consumes": [
@@ -153,19 +142,19 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "owner"
+                    "owners"
                 ],
                 "summary": "Update owner",
                 "parameters": [
                     {
+                        "type": "integer",
+                        "description": "owner ID",
                         "name": "id",
                         "in": "path",
-                        "required": true,
-                        "type": "integer",
-                        "description": "Owner ID"
+                        "required": true
                     },
                     {
-                        "description": "Owner credentials",
+                        "description": "owner details",
                         "name": "input",
                         "in": "body",
                         "required": true,
@@ -176,13 +165,13 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "Successfully retrieved owner",
+                        "description": "Successfully updated owner",
                         "schema": {
                             "$ref": "#/definitions/models.Owner"
                         }
                     },
                     "400": {
-                        "description": "Invalid input body",
+                        "description": "Invalid input body or owner ID",
                         "schema": {
                             "$ref": "#/definitions/models.ErrorDTO"
                         }
@@ -194,7 +183,7 @@ const docTemplate = `{
                         }
                     },
                     "409": {
-                        "description": "owner with same email already exists",
+                        "description": "Owner with same email already exists",
                         "schema": {
                             "$ref": "#/definitions/models.ErrorDTO"
                         }
@@ -206,11 +195,9 @@ const docTemplate = `{
                         }
                     }
                 }
-            }
-        },
-        "/owner/delete/{id}": {
+            },
             "delete": {
-                "description": "Delete owner by his ID",
+                "description": "Delete owner details by ID",
                 "consumes": [
                     "application/json"
                 ],
@@ -218,16 +205,25 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "owner"
+                    "owners"
                 ],
                 "summary": "Delete owner",
                 "parameters": [
                     {
+                        "type": "integer",
+                        "description": "owner ID",
                         "name": "id",
                         "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "owner details",
+                        "name": "input",
+                        "in": "body",
                         "required": true,
-                        "type": "integer",
-                        "description": "Owner ID"
+                        "schema": {
+                            "$ref": "#/definitions/models.Owner"
+                        }
                     }
                 ],
                 "responses": {
@@ -238,7 +234,7 @@ const docTemplate = `{
                         }
                     },
                     "404": {
-                        "description": "Owner not found",
+                        "description": "owner not found",
                         "schema": {
                             "$ref": "#/definitions/models.ErrorDTO"
                         }
@@ -252,9 +248,33 @@ const docTemplate = `{
                 }
             }
         },
-        "/pet/create": {
+        "/info/v1/pet": {
+            "get": {
+                "description": "Get all pets details",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "pets"
+                ],
+                "summary": "Get all pets",
+                "responses": {
+                    "200": {
+                        "description": "Successfully retrieved pets",
+                        "schema": {
+                            "$ref": "#/definitions/models.Pet"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/models.ErrorDTO"
+                        }
+                    }
+                }
+            },
             "post": {
-                "description": "Creating pet with full info",
+                "description": "Create a new pet in the system. Age \u0026 weight should be \u003e 0 \u0026 Gender should be 'Male' or 'Female'",
                 "consumes": [
                     "application/json"
                 ],
@@ -262,12 +282,12 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "pet"
+                    "pets"
                 ],
-                "summary": "Create pet",
+                "summary": "Create Pet",
                 "parameters": [
                     {
-                        "description": "Pet credentials",
+                        "description": "Pet details",
                         "name": "input",
                         "in": "body",
                         "required": true,
@@ -278,7 +298,7 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "201": {
-                        "description": "Successfully created",
+                        "description": "Successfully created pet",
                         "schema": {
                             "$ref": "#/definitions/models.Pet"
                         }
@@ -298,26 +318,23 @@ const docTemplate = `{
                 }
             }
         },
-        "/pet/get/{id}": {
+        "/info/v1/pet/{id}": {
             "get": {
-                "description": "Get pet's information by his ID",
-                "consumes": [
-                    "application/json"
-                ],
+                "description": "Get pet details by ID",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
-                    "pet"
+                    "pets"
                 ],
-                "summary": "Get pet",
+                "summary": "Get Pet",
                 "parameters": [
                     {
+                        "type": "integer",
+                        "description": "Pet ID",
                         "name": "id",
                         "in": "path",
-                        "required": true,
-                        "type": "integer",
-                        "description": "pet ID"
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -328,7 +345,7 @@ const docTemplate = `{
                         }
                     },
                     "404": {
-                        "description": "pet not found",
+                        "description": "Pet not found",
                         "schema": {
                             "$ref": "#/definitions/models.ErrorDTO"
                         }
@@ -340,43 +357,7 @@ const docTemplate = `{
                         }
                     }
                 }
-            }
-        },
-        "/pet/get": {
-            "get": {
-                "description": "Get all pets information",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "pet"
-                ],
-                "summary": [
-                    "Get all pets"
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Successfully retrieved pets",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/models.Pet"
-                            }
-                        }
-                    },
-                    "500": {
-                        "description": "Internal server error",
-                        "schema": {
-                            "$ref": "#/definitions/models.ErrorDTO"
-                        }
-                    }
-                }
-            }
-        },
-        "/pet/update/{id}": {
+            },
             "put": {
                 "description": "Update pet details by ID",
                 "consumes": [
@@ -386,19 +367,19 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "pet"
+                    "pets"
                 ],
-                "summary": "Update pet",
+                "summary": "Update Pet",
                 "parameters": [
                     {
+                        "type": "integer",
+                        "description": "Pet ID",
                         "name": "id",
                         "in": "path",
-                        "required": true,
-                        "type": "integer",
-                        "description": "pet ID"
+                        "required": true
                     },
                     {
-                        "description": "Pet credentials",
+                        "description": "Pet details",
                         "name": "input",
                         "in": "body",
                         "required": true,
@@ -409,19 +390,19 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "Successfully retrieved pet",
+                        "description": "Successfully updated pet",
                         "schema": {
                             "$ref": "#/definitions/models.Pet"
                         }
                     },
                     "400": {
-                        "description": "Invalid input body",
+                        "description": "Invalid input body or pet ID",
                         "schema": {
                             "$ref": "#/definitions/models.ErrorDTO"
                         }
                     },
                     "404": {
-                        "description": "pet not found",
+                        "description": "Pet not found",
                         "schema": {
                             "$ref": "#/definitions/models.ErrorDTO"
                         }
@@ -433,11 +414,9 @@ const docTemplate = `{
                         }
                     }
                 }
-            }
-        },
-        "/pet/delete/{id}": {
+            },
             "delete": {
-                "description": "Delete pet by it ID",
+                "description": "Delete pet details by ID",
                 "consumes": [
                     "application/json"
                 ],
@@ -445,16 +424,25 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "pet"
+                    "pets"
                 ],
-                "summary": "Delete pet",
+                "summary": "Delete Pet",
                 "parameters": [
                     {
+                        "type": "integer",
+                        "description": "Pet ID",
                         "name": "id",
                         "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Pet details",
+                        "name": "input",
+                        "in": "body",
                         "required": true,
-                        "type": "integer",
-                        "description": "pet ID"
+                        "schema": {
+                            "$ref": "#/definitions/models.Pet"
+                        }
                     }
                 ],
                 "responses": {
@@ -465,7 +453,7 @@ const docTemplate = `{
                         }
                     },
                     "404": {
-                        "description": "pet not found",
+                        "description": "Pet not found",
                         "schema": {
                             "$ref": "#/definitions/models.ErrorDTO"
                         }
@@ -501,7 +489,7 @@ const docTemplate = `{
                 "id": {
                     "type": "integer"
                 },
-                "password": {
+                "password_hash": {
                     "description": "password hash",
                     "type": "string"
                 },
@@ -513,50 +501,41 @@ const docTemplate = `{
         "models.Pet": {
             "type": "object",
             "properties": {
-                "id": {
-                    "type": "integer",
-                    "description": "Unique identifier for the pet"
+                "age": {
+                    "type": "integer"
                 },
                 "animal_type": {
-                    "type": "string",
-                    "description": "Type of animal, e.g., dog, cat"
-                },
-                "name": {
-                    "type": "string",
-                    "description": "Name of the pet"
-                },
-                "gender": {
-                    "type": "string",
-                    "description": "Gender of the pet",
-                    "nullable": true
-                },
-                "age": {
-                    "type": "integer",
-                    "description": "Age of the pet",
-                    "nullable": true
-                },
-                "weight": {
-                    "type": "number",
-                    "format": "float",
-                    "description": "Weight of the pet in kilograms",
-                    "nullable": true
-                },
-                "condition": {
-                    "type": "string",
-                    "description": "Current health condition of the pet",
-                    "nullable": true
+                    "type": "string"
                 },
                 "behavior": {
-                    "type": "string",
-                    "description": "Behavioral traits of the pet",
-                    "nullable": true
+                    "type": "string"
+                },
+                "condition": {
+                    "type": "string"
+                },
+                "gender": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
                 },
                 "research_status": {
-                    "type": "string",
-                    "description": "Status in any ongoing research",
-                    "nullable": true
+                    "type": "string"
+                },
+                "weight": {
+                    "type": "number"
                 }
             }
+        }
+    },
+    "securityDefinitions": {
+        "ApiKeyAuth": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
         }
     }
 }`
@@ -567,8 +546,8 @@ var SwaggerInfo = &swag.Spec{
 	Host:             "",
 	BasePath:         "/",
 	Schemes:          []string{},
-	Title:            "Vet clinic info service",
-	Description:      "info service",
+	Title:            "Vet clinic auth service",
+	Description:      "auth service",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 	LeftDelim:        "{{",

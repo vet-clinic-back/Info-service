@@ -9,3 +9,5 @@
     "behavior": "friendly",
     "research_status": "none"
 }
+
+swag init -g ./cmd/info/main.go

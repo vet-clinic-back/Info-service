@@ -6,5 +6,5 @@ import (
 )
 
 func (h *Handler) newErrorResponse(c *gin.Context, statusCode int, message string) {
-	c.AbortWithStatusJSON(statusCode, models.ErrorDTO{message})
+	c.AbortWithStatusJSON(statusCode, models.ErrorDTO{Message: message})
 }
