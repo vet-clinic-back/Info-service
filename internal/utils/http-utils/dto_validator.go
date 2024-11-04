@@ -1,4 +1,4 @@
-package utils
+package http_utils
 
 import (
 	"errors"

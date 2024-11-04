@@ -8,9 +8,9 @@ import (
 )
 
 type Info interface {
-	CreatePet(pet models.Pet) (uint, error)
+	CreatePetWithCard(pet models.Pet, ownderID uint, vetID uint) (uint, error)
 	GetPet(pet models.Pet) (models.Pet, error)
-	GetAllPets() ([]models.Pet, error)
+	GetPets(filter models.PetReqFilter) ([]models.OutputPetDTO, error)
 	UpdatePet(pet models.Pet) (models.Pet, error)
 	DeletePet(id uint) error
 	//

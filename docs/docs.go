@@ -258,11 +258,43 @@ const docTemplate = `{
                     "pets"
                 ],
                 "summary": "Get all pets",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Pet ID",
+                        "name": "pet_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Veterinarian ID",
+                        "name": "vet_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Owner ID",
+                        "name": "owner_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "offset",
+                        "name": "offset",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "limit",
+                        "name": "limit",
+                        "in": "query"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Successfully retrieved pets",
                         "schema": {
-                            "$ref": "#/definitions/models.Pet"
+                            "$ref": "#/definitions/models.OutputPetDTO"
                         }
                     },
                     "500": {
@@ -292,7 +324,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.Pet"
+                            "$ref": "#/definitions/handlers.createPetDTO"
                         }
                     }
                 ],
@@ -300,7 +332,7 @@ const docTemplate = `{
                     "201": {
                         "description": "Successfully created pet",
                         "schema": {
-                            "$ref": "#/definitions/models.Pet"
+                            "type": "number"
                         }
                     },
                     "400": {
@@ -469,11 +501,63 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "handlers.createPetDTO": {
+            "type": "object",
+            "properties": {
+                "age": {
+                    "type": "integer"
+                },
+                "animal_type": {
+                    "type": "string"
+                },
+                "behavior": {
+                    "type": "string"
+                },
+                "condition": {
+                    "type": "string"
+                },
+                "gender": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "owner_id": {
+                    "type": "integer"
+                },
+                "research_status": {
+                    "type": "string"
+                },
+                "vet_id": {
+                    "type": "integer"
+                },
+                "weight": {
+                    "type": "number"
+                }
+            }
+        },
         "models.ErrorDTO": {
             "type": "object",
             "properties": {
                 "message": {
                     "type": "string"
+                }
+            }
+        },
+        "models.OutputPetDTO": {
+            "type": "object",
+            "properties": {
+                "owner_id": {
+                    "type": "integer"
+                },
+                "pet_info": {
+                    "$ref": "#/definitions/models.Pet"
+                },
+                "vet_id": {
+                    "type": "integer"
                 }
             }
         },

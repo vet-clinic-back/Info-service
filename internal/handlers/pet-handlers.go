@@ -2,21 +2,28 @@ package handlers
 
 import (
 	"database/sql"
+	"errors"
+	"github.com/vet-clinic-back/info-service/internal/utils/http-utils"
 	"net/http"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"github.com/vet-clinic-back/info-service/internal/models"
-	"github.com/vet-clinic-back/info-service/internal/utils"
 )
+
+type createPetDTO struct {
+	VetID   uint `json:"vet_id"`
+	OwnerID uint `json:"owner_id"`
+	models.Pet
+}
 
 // @Summary Create Pet
 // @Description Create a new pet in the system. Age & weight should be > 0 & Gender should be 'Male' or 'Female'
 // @Tags pets
 // @Accept json
 // @Produce json
-// @Param input body models.Pet true "Pet details"
-// @Success 201 {object} models.Pet "Successfully created pet"
+// @Param input body createPetDTO true "Pet details"
+// @Success 201 {object} number "Successfully created pet"
 // @Failure 400 {object} models.ErrorDTO "Invalid input body"
 // @Failure 500 {object} models.ErrorDTO "Internal server error"
 // @Router /info/v1/pet [post]
@@ -24,7 +31,7 @@ func (h *Handler) createPet(c *gin.Context) {
 	op := "Handler.createPet"
 	log := h.log.WithField("op", op)
 
-	var input models.Pet
+	var input createPetDTO
 
 	log.Debug("binding json")
 	if err := c.BindJSON(&input); err != nil {
@@ -34,16 +41,17 @@ func (h *Handler) createPet(c *gin.Context) {
 	}
 
 	log.Debug("validating input")
-	if err := utils.ValidateCreatingPetDTO(input); err != nil {
+	if err := http_utils.ValidateCreatingPetDTO(input.Pet); err != nil {
 		log.Error("failed to validate input: ", err.Error())
-		h.newErrorResponse(c, http.StatusBadRequest, "invalid input body. all required fields must be present")
+		h.newErrorResponse(c, http.StatusBadRequest, "invalid input body. Age & weight should be > 0 & Gender "+
+			"should be 'Male' or 'Female'")
 		return
 	}
 
 	log.Debug("creating pet")
-	pet, err := h.service.Info.CreatePet(input)
+	pet, err := h.service.Info.CreatePetWithCard(input.Pet, input.OwnerID, input.VetID)
 	if err != nil {
-		log.Error("failed to create pet: ", err.Error())
+		log.Errorf("failed to create pet: %s", err.Error())
 		h.newErrorResponse(c, http.StatusInternalServerError, "failed to create pet")
 		return
 	}
@@ -93,24 +101,43 @@ func (h *Handler) getPet(c *gin.Context) {
 // @Summary Get all pets
 // @Description Get all pets details
 // @Tags pets
+// @Param pet_id query int false "Pet ID"
+// @Param vet_id query int false "Veterinarian ID"
+// @Param owner_id query int false "Owner ID"
+// @Param offset query int false "offset"
+// @Param limit query int false "limit"
 // @Produce json
-// @Success 200 {object} models.Pet "Successfully retrieved pets"
+// @Success 200 {object} models.OutputPetDTO "Successfully retrieved pets"
 // @Failure 500 {object} models.ErrorDTO "Internal server error"
 // @Router  /info/v1/pet [get]
-func (h *Handler) getAllPets(c *gin.Context) {
-	op := "Handler.getAllPets"
+func (h *Handler) getPets(c *gin.Context) {
+	op := "Handler.getPets"
 	log := h.log.WithField("op", op)
 
-	log.Debug("retrieving all pets")
-	pets, err := h.service.Info.GetAllPets()
+	filters, err := http_utils.ParsePetFilters(c)
 	if err != nil {
-		log.Error("failed to get all pets: ", err.Error())
-		h.newErrorResponse(c, http.StatusInternalServerError, "failed to get all pets")
+		log.Error("failed to parse filters: ", err.Error())
+		h.newErrorResponse(c, http.StatusBadRequest, "failed to parse filters")
 		return
 	}
 
-	log.Info("successfully retrieved all pets")
-	c.JSON(http.StatusOK, pets)
+	log.WithField("filters", filters).Info("filters updated")
+
+	log.Debug("retrieving all petsWithExtraInfo")
+	petsWithExtraInfo, err := h.service.Info.GetPets(filters)
+	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			log.Error("pets not found: ", err.Error())
+			h.newErrorResponse(c, http.StatusNotFound, "not found")
+			return
+		}
+		log.Error("failed to get petsWithExtraInfo with filter: ", err.Error())
+		h.newErrorResponse(c, http.StatusInternalServerError, "failed to get petsWithExtraInfo with filter")
+		return
+	}
+
+	log.Info("successfully retrieved all petsWithExtraInfo")
+	c.JSON(http.StatusOK, petsWithExtraInfo)
 }
 
 // @Summary Update Pet

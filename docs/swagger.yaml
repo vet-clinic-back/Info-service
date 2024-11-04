@@ -1,9 +1,43 @@
 basePath: /
 definitions:
+  handlers.createPetDTO:
+    properties:
+      age:
+        type: integer
+      animal_type:
+        type: string
+      behavior:
+        type: string
+      condition:
+        type: string
+      gender:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      owner_id:
+        type: integer
+      research_status:
+        type: string
+      vet_id:
+        type: integer
+      weight:
+        type: number
+    type: object
   models.ErrorDTO:
     properties:
       message:
         type: string
+    type: object
+  models.OutputPetDTO:
+    properties:
+      owner_id:
+        type: integer
+      pet_info:
+        $ref: '#/definitions/models.Pet'
+      vet_id:
+        type: integer
     type: object
   models.Owner:
     properties:
@@ -203,13 +237,34 @@ paths:
   /info/v1/pet:
     get:
       description: Get all pets details
+      parameters:
+      - description: Pet ID
+        in: query
+        name: pet_id
+        type: integer
+      - description: Veterinarian ID
+        in: query
+        name: vet_id
+        type: integer
+      - description: Owner ID
+        in: query
+        name: owner_id
+        type: integer
+      - description: offset
+        in: query
+        name: offset
+        type: integer
+      - description: limit
+        in: query
+        name: limit
+        type: integer
       produces:
       - application/json
       responses:
         "200":
           description: Successfully retrieved pets
           schema:
-            $ref: '#/definitions/models.Pet'
+            $ref: '#/definitions/models.OutputPetDTO'
         "500":
           description: Internal server error
           schema:
@@ -228,14 +283,14 @@ paths:
         name: input
         required: true
         schema:
-          $ref: '#/definitions/models.Pet'
+          $ref: '#/definitions/handlers.createPetDTO'
       produces:
       - application/json
       responses:
         "201":
           description: Successfully created pet
           schema:
-            $ref: '#/definitions/models.Pet'
+            type: number
         "400":
           description: Invalid input body
           schema:

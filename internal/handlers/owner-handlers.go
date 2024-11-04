@@ -3,12 +3,12 @@ package handlers
 import (
 	"database/sql"
 	"errors"
+	"github.com/vet-clinic-back/info-service/internal/utils/http-utils"
 	"net/http"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"github.com/vet-clinic-back/info-service/internal/models"
-	"github.com/vet-clinic-back/info-service/internal/utils"
 )
 
 // @Summary Create owner
@@ -36,7 +36,7 @@ func (h *Handler) createOwner(c *gin.Context) {
 	}
 
 	log.Debug("validating input")
-	if err := utils.ValidateCreatingOwnerDTO(input); err != nil {
+	if err := http_utils.ValidateCreatingOwnerDTO(input); err != nil {
 		log.Error("failed to validate input: ", err.Error())
 		h.newErrorResponse(c, http.StatusBadRequest, "invalid input body. all required fields must be present")
 		return

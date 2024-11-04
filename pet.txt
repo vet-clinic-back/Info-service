@@ -1,13 +1,15 @@
-{
-    "id": 1,
-    "animal_type": "dog",
-    "name": "Buddy",
-    "gender": "male",
-    "age": 5,
-    "weight": 20.5,
-    "condition": "healthy",
-    "behavior": "friendly",
-    "research_status": "none"
-}
-
 swag init -g ./cmd/info/main.go
+
+{
+  "age": 1,
+  "animal_type": "string",
+  "behavior": "string",
+  "condition": "string",
+  "gender": "Male",
+  "id": 0,
+  "name": "string",
+  "owner_id": 3,
+  "research_status": "string",
+  "vet_id": 2,
+  "weight": 1
+}
