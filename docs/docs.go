@@ -281,6 +281,57 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/info/v1/record/entries": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Creates a new med entry",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "MedEntry"
+                ],
+                "summary": "Create med entry",
+                "parameters": [
+                    {
+                        "description": "entry data",
+                        "name": "input",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.MedicalEntry"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Successfully created утекн",
+                        "schema": {
+                            "type": "number"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid input body",
+                        "schema": {
+                            "$ref": "#/definitions/models.ErrorDTO"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/models.ErrorDTO"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -327,6 +378,38 @@ const docTemplate = `{
             "properties": {
                 "message": {
                     "type": "string"
+                }
+            }
+        },
+        "models.MedicalEntry": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "device_number": {
+                    "type": "integer"
+                },
+                "disease": {
+                    "type": "string"
+                },
+                "entry_date": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "medical_record_id": {
+                    "type": "integer"
+                },
+                "recommendation": {
+                    "type": "string"
+                },
+                "vaccinations": {
+                    "type": "string"
+                },
+                "vet_id": {
+                    "type": "integer"
                 }
             }
         },

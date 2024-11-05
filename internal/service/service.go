@@ -21,12 +21,19 @@ type Info interface {
 	DeleteOwner(id uint) error
 }
 
+type MedInfo interface {
+	CreateMedEntry(entry models.MedicalEntry) (uint, error)
+}
+
 type Service struct {
 	Info
+	MedInfo
 }
 
 func New(log *logging.Logger, stor storage.Info) *Service {
+	s := infoservice.New(log, stor)
 	return &Service{
-		Info: infoservice.New(log, stor),
+		Info:    s,
+		MedInfo: s,
 	}
 }

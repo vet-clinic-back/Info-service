@@ -36,13 +36,22 @@ func (h *Handler) InitRoutes() *gin.Engine {
 	{
 		v1 := info.Group("/v1")
 		{
-			pet := v1.Group("/pets")
+			pets := v1.Group("/pets")
 			{
-				pet.POST("/", h.createPet)
-				pet.GET("/", h.getPets)
-				pet.GET("/:id", h.getPet)
-				pet.PUT("/:id", h.updatePet)
-				pet.DELETE("/:id", h.deletePet)
+				pets.POST("/", h.createPet)
+				pets.GET("/", h.getPets)
+				pets.GET("/:id", h.getPet)
+				pets.PUT("/:id", h.updatePet)
+				pets.DELETE("/:id", h.deletePet)
+			}
+			medCard := v1.Group("/record")
+			{
+				entries := medCard.Group("/entries")
+				{
+					entries.GET("/", func(context *gin.Context) {})
+					entries.POST("/", h.createEntry)
+					entries.DELETE("/", func(context *gin.Context) {})
+				}
 			}
 			//owner := v1.Group("/owner")
 			//{

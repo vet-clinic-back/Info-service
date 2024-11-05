@@ -10,7 +10,7 @@ import (
 
 const petsTable = "pet"
 const vetTable = "veterinarian"
-const medicalRecordTable = "medical_record"
+const medRecordTable = "medical_record"
 
 // CreatePetWithCard creates pet -> creates card. on fail do not create each.
 func (s *Storage) CreatePetWithCard(pet models.Pet, ownderID uint, vetID uint) (uint, error) {
@@ -39,7 +39,7 @@ func (s *Storage) CreatePetWithCard(pet models.Pet, ownderID uint, vetID uint) (
 	// Create medical record
 	query = fmt.Sprintf("INSERT INTO %s "+
 		"(veterinarian_id, owner_id, pet_id) "+
-		"VALUES ($1, $2, $3)", medicalRecordTable)
+		"VALUES ($1, $2, $3)", medRecordTable)
 
 	_, err = tx.Exec(query, vetID, ownderID, petID)
 	if err != nil {
@@ -124,19 +124,19 @@ func (s *Storage) GetPetsWithOwnerAndVet(filter models.PetReqFilter) ([]models.O
 		"medical_record.veterinarian_id",
 	).
 		From(petsTable).
-		Join(fmt.Sprintf("%s ON %s.id = %s.pet_id", medicalRecordTable, petsTable, medicalRecordTable)).
-		Join(fmt.Sprintf("%s ON %s.owner_id = %s.id", ownersTable, medicalRecordTable, ownersTable)).
-		Join(fmt.Sprintf("%s ON %s.veterinarian_id = %s.id", vetTable, medicalRecordTable, vetTable))
+		Join(fmt.Sprintf("%s ON %s.id = %s.pet_id", medRecordTable, petsTable, medRecordTable)).
+		Join(fmt.Sprintf("%s ON %s.owner_id = %s.id", ownersTable, medRecordTable, ownersTable)).
+		Join(fmt.Sprintf("%s ON %s.veterinarian_id = %s.id", vetTable, medRecordTable, vetTable))
 
 	// Apply filters only if they are non-nil
 	if filter.PetID != nil {
 		query = query.Where(squirrel.Eq{fmt.Sprintf("%s.id", petsTable): *filter.PetID})
 	}
 	if filter.OwnerID != nil {
-		query = query.Where(squirrel.Eq{fmt.Sprintf("%s.owner_id", medicalRecordTable): *filter.OwnerID})
+		query = query.Where(squirrel.Eq{fmt.Sprintf("%s.owner_id", medRecordTable): *filter.OwnerID})
 	}
 	if filter.VetID != nil {
-		query = query.Where(squirrel.Eq{fmt.Sprintf("%s.veterinarian_id", medicalRecordTable): *filter.VetID})
+		query = query.Where(squirrel.Eq{fmt.Sprintf("%s.veterinarian_id", medRecordTable): *filter.VetID})
 	}
 	if filter.Limit != nil {
 		query = query.Limit(uint64(*filter.Limit))
@@ -238,7 +238,7 @@ func (s *Storage) DelPetWithCard(id uint) error {
 	// delete med record entries
 
 	// delete med record
-	stmt := s.psql.Delete(medicalRecordTable).Where(squirrel.Eq{"pet_id": id})
+	stmt := s.psql.Delete(medRecordTable).Where(squirrel.Eq{"pet_id": id})
 	query, args, err := stmt.ToSql()
 	if err != nil {
 		err := tx.Rollback()

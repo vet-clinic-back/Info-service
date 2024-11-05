@@ -24,9 +24,15 @@ type Owner interface {
 	DeleteOwner(id uint) error
 }
 
+type MedEntry interface {
+	CreateMedEntry(entry models.MedicalEntry) (uint, error)
+	DeleteMedEntry(medRecordID uint, entryID uint) error
+}
+
 type Info interface {
 	Owner
 	Pet
+	MedEntry
 }
 
 type StorageProcess interface {

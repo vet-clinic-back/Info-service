@@ -99,7 +99,8 @@ CREATE TABLE IF NOT EXISTS medical_entry (
     vaccinations TEXT,
     recommendation TEXT,
     medical_record_id INTEGER REFERENCES medical_record(id),
-    device_number INTEGER REFERENCES device(id)
+    device_number INTEGER REFERENCES device(id),
+    veterinarian_id INTEGER REFERENCES veterinarian(id)
 );
 
 COMMENT ON COLUMN medical_entry.id IS 'Идентификатор записи в медкарте';
@@ -110,5 +111,6 @@ COMMENT ON COLUMN medical_entry.vaccinations IS 'Вакцинации';
 COMMENT ON COLUMN medical_entry.recommendation IS 'Рекомендации';
 COMMENT ON COLUMN medical_entry.medical_record_id IS 'Ссылка на медкарту';
 COMMENT ON COLUMN medical_entry.device_number IS 'Номер устройства';
+COMMENT ON COLUMN medical_entry.veterinarian_id IS 'Идентификатор ветеринара';
 
 
