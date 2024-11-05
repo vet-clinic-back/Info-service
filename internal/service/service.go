@@ -12,8 +12,8 @@ type Info interface {
 	GetPet(pet models.Pet) (models.Pet, error)
 	GetPets(filter models.PetReqFilter) ([]models.OutputPetDTO, error)
 	UpdatePet(pet models.Pet) (models.Pet, error)
-	DeletePet(id uint) error
-	//
+	DelPetWithCard(id uint) error
+	// owner is used at auth service
 	CreateOwner(user models.Owner) (uint, error)
 	GetOwner(owner models.Owner) (models.Owner, error)
 	GetAllOwners() ([]models.Owner, error)

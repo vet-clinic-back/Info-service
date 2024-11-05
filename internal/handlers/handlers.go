@@ -36,7 +36,7 @@ func (h *Handler) InitRoutes() *gin.Engine {
 	{
 		v1 := info.Group("/v1")
 		{
-			pet := v1.Group("/pet")
+			pet := v1.Group("/pets")
 			{
 				pet.POST("/", h.createPet)
 				pet.GET("/", h.getPets)

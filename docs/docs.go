@@ -15,241 +15,13 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/info/v1/owner": {
+        "/info/v1/pets": {
             "get": {
-                "description": "Get all owners details",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "owners"
-                ],
-                "summary": "Get all owners",
-                "responses": {
-                    "200": {
-                        "description": "Successfully retrieved owners",
-                        "schema": {
-                            "$ref": "#/definitions/models.Owner"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal server error",
-                        "schema": {
-                            "$ref": "#/definitions/models.ErrorDTO"
-                        }
-                    }
-                }
-            }
-        },
-        "/info/v1/owner/": {
-            "post": {
-                "description": "Create a new owner in the system",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "owners"
-                ],
-                "summary": "Create owner",
-                "parameters": [
+                "security": [
                     {
-                        "description": "owner details",
-                        "name": "input",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/models.Owner"
-                        }
+                        "ApiKeyAuth": []
                     }
                 ],
-                "responses": {
-                    "201": {
-                        "description": "Successfully created owner",
-                        "schema": {
-                            "$ref": "#/definitions/models.Owner"
-                        }
-                    },
-                    "400": {
-                        "description": "Invalid input body",
-                        "schema": {
-                            "$ref": "#/definitions/models.ErrorDTO"
-                        }
-                    },
-                    "409": {
-                        "description": "Owner with same email already exists",
-                        "schema": {
-                            "$ref": "#/definitions/models.ErrorDTO"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal server error",
-                        "schema": {
-                            "$ref": "#/definitions/models.ErrorDTO"
-                        }
-                    }
-                }
-            }
-        },
-        "/info/v1/owner/{id}": {
-            "get": {
-                "description": "Get owner details by ID",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "owners"
-                ],
-                "summary": "Get owner",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "owner ID",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Successfully retrieved owner",
-                        "schema": {
-                            "$ref": "#/definitions/models.Owner"
-                        }
-                    },
-                    "404": {
-                        "description": "owner not found",
-                        "schema": {
-                            "$ref": "#/definitions/models.ErrorDTO"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal server error",
-                        "schema": {
-                            "$ref": "#/definitions/models.ErrorDTO"
-                        }
-                    }
-                }
-            },
-            "put": {
-                "description": "Update owner details by ID",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "owners"
-                ],
-                "summary": "Update owner",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "owner ID",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "description": "owner details",
-                        "name": "input",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/models.Owner"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Successfully updated owner",
-                        "schema": {
-                            "$ref": "#/definitions/models.Owner"
-                        }
-                    },
-                    "400": {
-                        "description": "Invalid input body or owner ID",
-                        "schema": {
-                            "$ref": "#/definitions/models.ErrorDTO"
-                        }
-                    },
-                    "404": {
-                        "description": "Owner not found",
-                        "schema": {
-                            "$ref": "#/definitions/models.ErrorDTO"
-                        }
-                    },
-                    "409": {
-                        "description": "Owner with same email already exists",
-                        "schema": {
-                            "$ref": "#/definitions/models.ErrorDTO"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal server error",
-                        "schema": {
-                            "$ref": "#/definitions/models.ErrorDTO"
-                        }
-                    }
-                }
-            },
-            "delete": {
-                "description": "Delete owner details by ID",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "owners"
-                ],
-                "summary": "Delete owner",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "owner ID",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "description": "owner details",
-                        "name": "input",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/models.Owner"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Successfully deleted owner",
-                        "schema": {
-                            "$ref": "#/definitions/models.Owner"
-                        }
-                    },
-                    "404": {
-                        "description": "owner not found",
-                        "schema": {
-                            "$ref": "#/definitions/models.ErrorDTO"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal server error",
-                        "schema": {
-                            "$ref": "#/definitions/models.ErrorDTO"
-                        }
-                    }
-                }
-            }
-        },
-        "/info/v1/pet": {
-            "get": {
                 "description": "Get all pets details",
                 "produces": [
                     "application/json"
@@ -306,6 +78,11 @@ const docTemplate = `{
                 }
             },
             "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "Create a new pet in the system. Age \u0026 weight should be \u003e 0 \u0026 Gender should be 'Male' or 'Female'",
                 "consumes": [
                     "application/json"
@@ -350,8 +127,13 @@ const docTemplate = `{
                 }
             }
         },
-        "/info/v1/pet/{id}": {
+        "/info/v1/pets/{id}": {
             "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "Get pet details by ID",
                 "produces": [
                     "application/json"
@@ -391,6 +173,11 @@ const docTemplate = `{
                 }
             },
             "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "Update pet details by ID",
                 "consumes": [
                     "application/json"
@@ -448,6 +235,11 @@ const docTemplate = `{
                 }
             },
             "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "Delete pet details by ID",
                 "consumes": [
                     "application/json"
@@ -466,15 +258,6 @@ const docTemplate = `{
                         "name": "id",
                         "in": "path",
                         "required": true
-                    },
-                    {
-                        "description": "Pet details",
-                        "name": "input",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/models.Pet"
-                        }
                     }
                 ],
                 "responses": {
@@ -558,27 +341,6 @@ const docTemplate = `{
                 },
                 "vet_id": {
                     "type": "integer"
-                }
-            }
-        },
-        "models.Owner": {
-            "type": "object",
-            "properties": {
-                "email": {
-                    "type": "string"
-                },
-                "fullname": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "password_hash": {
-                    "description": "password hash",
-                    "type": "string"
-                },
-                "phone": {
-                    "type": "string"
                 }
             }
         },

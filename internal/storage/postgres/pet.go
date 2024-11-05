@@ -226,22 +226,58 @@ func (s *Storage) UpdatePet(pet models.Pet) (models.Pet, error) {
 	return s.GetPet(pet)
 }
 
-func (s *Storage) DeletePet(id uint) error {
-	log := s.log.WithField("op", "Storage.DeletePet")
+// DelPetWithCard deletes med records -> deletes pet info
+func (s *Storage) DelPetWithCard(id uint) error {
+	log := s.log.WithField("op", "Storage.DelPetWithCard")
 
-	stmt := s.psql.Delete(petsTable).Where(squirrel.Eq{"id": id})
+	tx, err := s.db.Begin()
+	if err != nil {
+		return err
+	}
 
+	// delete med record entries
+
+	// delete med record
+	stmt := s.psql.Delete(medicalRecordTable).Where(squirrel.Eq{"pet_id": id})
 	query, args, err := stmt.ToSql()
 	if err != nil {
-		return fmt.Errorf("failed to build delete query: %w", err)
+		err := tx.Rollback()
+		if err != nil {
+			return err
+		}
+		return fmt.Errorf("failed to build delete med record query: %w", err)
+	}
+
+	_, err = tx.Exec(query, args...)
+	if err != nil {
+		err := tx.Rollback()
+		if err != nil {
+			return err
+		}
+		return fmt.Errorf("failed to delete record query: %w", err)
+	}
+
+	// delete pet
+	stmt = s.psql.Delete(petsTable).Where(squirrel.Eq{"id": id})
+	query, args, err = stmt.ToSql()
+	if err != nil {
+		err := tx.Rollback()
+		if err != nil {
+			return err
+		}
+		return fmt.Errorf("failed to build delete pet query: %w", err)
 	}
 
 	log.Debug("query: ", query, " args: ", args)
 
-	_, err = s.db.Exec(query, args...)
+	_, err = tx.Exec(query, args...)
 	if err != nil {
+		err := tx.Rollback()
+		if err != nil {
+			return err
+		}
 		return fmt.Errorf("failed to delete pet: %w", err)
 	}
 
-	return nil
+	return tx.Commit()
 }

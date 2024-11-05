@@ -18,6 +18,6 @@ func (s *InfoService) UpdatePet(pet models.Pet) (models.Pet, error) {
 	return s.storage.UpdatePet(pet)
 }
 
-func (s *InfoService) DeletePet(id uint) error {
-	return s.storage.DeletePet(id)
+func (s *InfoService) DelPetWithCard(id uint) error {
+	return s.storage.DelPetWithCard(id)
 }

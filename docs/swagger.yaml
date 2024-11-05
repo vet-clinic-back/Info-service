@@ -39,20 +39,6 @@ definitions:
       vet_id:
         type: integer
     type: object
-  models.Owner:
-    properties:
-      email:
-        type: string
-      fullname:
-        type: string
-      id:
-        type: integer
-      password_hash:
-        description: password hash
-        type: string
-      phone:
-        type: string
-    type: object
   models.Pet:
     properties:
       age:
@@ -80,161 +66,7 @@ info:
   title: Vet clinic auth service
   version: "0.1"
 paths:
-  /info/v1/owner:
-    get:
-      description: Get all owners details
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: Successfully retrieved owners
-          schema:
-            $ref: '#/definitions/models.Owner'
-        "500":
-          description: Internal server error
-          schema:
-            $ref: '#/definitions/models.ErrorDTO'
-      summary: Get all owners
-      tags:
-      - owners
-  /info/v1/owner/:
-    post:
-      consumes:
-      - application/json
-      description: Create a new owner in the system
-      parameters:
-      - description: owner details
-        in: body
-        name: input
-        required: true
-        schema:
-          $ref: '#/definitions/models.Owner'
-      produces:
-      - application/json
-      responses:
-        "201":
-          description: Successfully created owner
-          schema:
-            $ref: '#/definitions/models.Owner'
-        "400":
-          description: Invalid input body
-          schema:
-            $ref: '#/definitions/models.ErrorDTO'
-        "409":
-          description: Owner with same email already exists
-          schema:
-            $ref: '#/definitions/models.ErrorDTO'
-        "500":
-          description: Internal server error
-          schema:
-            $ref: '#/definitions/models.ErrorDTO'
-      summary: Create owner
-      tags:
-      - owners
-  /info/v1/owner/{id}:
-    delete:
-      consumes:
-      - application/json
-      description: Delete owner details by ID
-      parameters:
-      - description: owner ID
-        in: path
-        name: id
-        required: true
-        type: integer
-      - description: owner details
-        in: body
-        name: input
-        required: true
-        schema:
-          $ref: '#/definitions/models.Owner'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: Successfully deleted owner
-          schema:
-            $ref: '#/definitions/models.Owner'
-        "404":
-          description: owner not found
-          schema:
-            $ref: '#/definitions/models.ErrorDTO'
-        "500":
-          description: Internal server error
-          schema:
-            $ref: '#/definitions/models.ErrorDTO'
-      summary: Delete owner
-      tags:
-      - owners
-    get:
-      description: Get owner details by ID
-      parameters:
-      - description: owner ID
-        in: path
-        name: id
-        required: true
-        type: integer
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: Successfully retrieved owner
-          schema:
-            $ref: '#/definitions/models.Owner'
-        "404":
-          description: owner not found
-          schema:
-            $ref: '#/definitions/models.ErrorDTO'
-        "500":
-          description: Internal server error
-          schema:
-            $ref: '#/definitions/models.ErrorDTO'
-      summary: Get owner
-      tags:
-      - owners
-    put:
-      consumes:
-      - application/json
-      description: Update owner details by ID
-      parameters:
-      - description: owner ID
-        in: path
-        name: id
-        required: true
-        type: integer
-      - description: owner details
-        in: body
-        name: input
-        required: true
-        schema:
-          $ref: '#/definitions/models.Owner'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: Successfully updated owner
-          schema:
-            $ref: '#/definitions/models.Owner'
-        "400":
-          description: Invalid input body or owner ID
-          schema:
-            $ref: '#/definitions/models.ErrorDTO'
-        "404":
-          description: Owner not found
-          schema:
-            $ref: '#/definitions/models.ErrorDTO'
-        "409":
-          description: Owner with same email already exists
-          schema:
-            $ref: '#/definitions/models.ErrorDTO'
-        "500":
-          description: Internal server error
-          schema:
-            $ref: '#/definitions/models.ErrorDTO'
-      summary: Update owner
-      tags:
-      - owners
-  /info/v1/pet:
+  /info/v1/pets:
     get:
       description: Get all pets details
       parameters:
@@ -269,6 +101,8 @@ paths:
           description: Internal server error
           schema:
             $ref: '#/definitions/models.ErrorDTO'
+      security:
+      - ApiKeyAuth: []
       summary: Get all pets
       tags:
       - pets
@@ -299,10 +133,12 @@ paths:
           description: Internal server error
           schema:
             $ref: '#/definitions/models.ErrorDTO'
+      security:
+      - ApiKeyAuth: []
       summary: Create Pet
       tags:
       - pets
-  /info/v1/pet/{id}:
+  /info/v1/pets/{id}:
     delete:
       consumes:
       - application/json
@@ -313,12 +149,6 @@ paths:
         name: id
         required: true
         type: integer
-      - description: Pet details
-        in: body
-        name: input
-        required: true
-        schema:
-          $ref: '#/definitions/models.Pet'
       produces:
       - application/json
       responses:
@@ -334,6 +164,8 @@ paths:
           description: Internal server error
           schema:
             $ref: '#/definitions/models.ErrorDTO'
+      security:
+      - ApiKeyAuth: []
       summary: Delete Pet
       tags:
       - pets
@@ -360,6 +192,8 @@ paths:
           description: Internal server error
           schema:
             $ref: '#/definitions/models.ErrorDTO'
+      security:
+      - ApiKeyAuth: []
       summary: Get Pet
       tags:
       - pets
@@ -398,6 +232,8 @@ paths:
           description: Internal server error
           schema:
             $ref: '#/definitions/models.ErrorDTO'
+      security:
+      - ApiKeyAuth: []
       summary: Update Pet
       tags:
       - pets

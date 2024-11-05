@@ -19,6 +19,7 @@ type createPetDTO struct {
 
 // @Summary Create Pet
 // @Description Create a new pet in the system. Age & weight should be > 0 & Gender should be 'Male' or 'Female'
+// @Security ApiKeyAuth
 // @Tags pets
 // @Accept json
 // @Produce json
@@ -26,7 +27,7 @@ type createPetDTO struct {
 // @Success 201 {object} number "Successfully created pet"
 // @Failure 400 {object} models.ErrorDTO "Invalid input body"
 // @Failure 500 {object} models.ErrorDTO "Internal server error"
-// @Router /info/v1/pet [post]
+// @Router /info/v1/pets [post]
 func (h *Handler) createPet(c *gin.Context) {
 	op := "Handler.createPet"
 	log := h.log.WithField("op", op)
@@ -62,13 +63,14 @@ func (h *Handler) createPet(c *gin.Context) {
 
 // @Summary Get Pet
 // @Description Get pet details by ID
+// @Security ApiKeyAuth
 // @Tags pets
 // @Produce json
 // @Param id path int true "Pet ID"
 // @Success 200 {object} models.Pet "Successfully retrieved pet"
 // @Failure 404 {object} models.ErrorDTO "Pet not found"
 // @Failure 500 {object} models.ErrorDTO "Internal server error"
-// @Router /info/v1/pet/{id} [get]
+// @Router /info/v1/pets/{id} [get]
 func (h *Handler) getPet(c *gin.Context) {
 	op := "Handler.getPet"
 	log := h.log.WithField("op", op)
@@ -84,7 +86,7 @@ func (h *Handler) getPet(c *gin.Context) {
 
 	pet, err := h.service.Info.GetPet(pt)
 	if err != nil {
-		if err == sql.ErrNoRows {
+		if errors.Is(err, sql.ErrNoRows) {
 			log.Error("pet not found: ", err.Error())
 			h.newErrorResponse(c, http.StatusNotFound, "pet not found")
 			return
@@ -100,6 +102,7 @@ func (h *Handler) getPet(c *gin.Context) {
 
 // @Summary Get all pets
 // @Description Get all pets details
+// @Security ApiKeyAuth
 // @Tags pets
 // @Param pet_id query int false "Pet ID"
 // @Param vet_id query int false "Veterinarian ID"
@@ -109,7 +112,7 @@ func (h *Handler) getPet(c *gin.Context) {
 // @Produce json
 // @Success 200 {object} models.OutputPetDTO "Successfully retrieved pets"
 // @Failure 500 {object} models.ErrorDTO "Internal server error"
-// @Router  /info/v1/pet [get]
+// @Router  /info/v1/pets [get]
 func (h *Handler) getPets(c *gin.Context) {
 	op := "Handler.getPets"
 	log := h.log.WithField("op", op)
@@ -142,6 +145,7 @@ func (h *Handler) getPets(c *gin.Context) {
 
 // @Summary Update Pet
 // @Description Update pet details by ID
+// @Security ApiKeyAuth
 // @Tags pets
 // @Accept json
 // @Produce json
@@ -151,7 +155,7 @@ func (h *Handler) getPets(c *gin.Context) {
 // @Failure 400 {object} models.ErrorDTO "Invalid input body or pet ID"
 // @Failure 404 {object} models.ErrorDTO "Pet not found"
 // @Failure 500 {object} models.ErrorDTO "Internal server error"
-// @Router /info/v1/pet/{id} [put]
+// @Router /info/v1/pets/{id} [put]
 func (h *Handler) updatePet(c *gin.Context) {
 	op := "Handler.updatePet"
 	log := h.log.WithField("op", op)
@@ -175,7 +179,7 @@ func (h *Handler) updatePet(c *gin.Context) {
 	log.Debug("updating pet")
 	updatedPet, err := h.service.Info.UpdatePet(input)
 	if err != nil {
-		if err == sql.ErrNoRows {
+		if errors.Is(err, sql.ErrNoRows) {
 			log.Error("pet not found: ", err.Error())
 			h.newErrorResponse(c, http.StatusNotFound, "pet not found")
 			return
@@ -191,15 +195,15 @@ func (h *Handler) updatePet(c *gin.Context) {
 
 // @Summary Delete Pet
 // @Description Delete pet details by ID
+// @Security ApiKeyAuth
 // @Tags pets
 // @Accept json
 // @Produce json
 // @Param id path int true "Pet ID"
-// @Param input body models.Pet true "Pet details"
 // @Success 200 {object} models.Pet "Successfully deleted pet"
 // @Failure 404 {object} models.ErrorDTO "Pet not found"
 // @Failure 500 {object} models.ErrorDTO "Internal server error"
-// @Router /info/v1/pet/{id} [delete]
+// @Router /info/v1/pets/{id} [delete]
 func (h *Handler) deletePet(c *gin.Context) {
 	op := "Handler.deletePet"
 	log := h.log.WithField("op", op)
@@ -212,9 +216,9 @@ func (h *Handler) deletePet(c *gin.Context) {
 	}
 
 	log.Debug("deleting pet")
-	err = h.service.Info.DeletePet(uint(id))
+	err = h.service.Info.DelPetWithCard(uint(id))
 	if err != nil {
-		if err == sql.ErrNoRows {
+		if errors.Is(err, sql.ErrNoRows) {
 			log.Error("pet not found: ", err.Error())
 			h.newErrorResponse(c, http.StatusNotFound, "pet not found")
 			return

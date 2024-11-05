@@ -24,6 +24,7 @@ import (
 func main() {
 	isLocal := flag.Bool("local", false, "is it local? can make logs pretty")
 	idDebug := flag.Bool("debug", false, "is it local? can make logs pretty")
+	port := flag.String("port", "8080", "is it port? can make logs pretty")
 	flag.Parse()
 
 	log := logging.NewLogger(isLocal, idDebug)
@@ -49,7 +50,7 @@ func main() {
 	server := server.NewServer()
 
 	log.Info("starting server on port 8080")
-	server.Run("8080", hander.InitRoutes()) // TODO use port from config
+	server.Run(*port, hander.InitRoutes())
 
 	log.Info("graceful shutdown")
 	server.Shutdown(context.Background())

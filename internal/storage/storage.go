@@ -13,7 +13,7 @@ type Pet interface {
 	GetPet(pet models.Pet) (models.Pet, error)
 	GetPetsWithOwnerAndVet(filter models.PetReqFilter) ([]models.OutputPetDTO, error)
 	UpdatePet(pet models.Pet) (models.Pet, error)
-	DeletePet(id uint) error
+	DelPetWithCard(id uint) error
 }
 
 type Owner interface {
