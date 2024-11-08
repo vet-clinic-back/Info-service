@@ -27,6 +27,7 @@ type Owner interface {
 type MedEntry interface {
 	CreateMedEntry(entry models.MedicalEntry) (uint, error)
 	DeleteMedEntry(medRecordID uint, entryID uint) error
+	GetMedEntries(models.EntryReqFilter) ([]models.MedicalEntry, error)
 }
 
 type Info interface {

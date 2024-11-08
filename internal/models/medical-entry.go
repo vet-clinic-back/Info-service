@@ -18,7 +18,7 @@ type MedicalEntry struct {
 	Disease         string `json:"disease"`
 	Vaccinations    string `json:"vaccinations"`
 	Recommendation  string `json:"recommendation"`
-	MedicalRecordID uint   `json:"medical_record_id"`
 	DeviceNumber    uint   `json:"device_number"`
+	MedicalRecordID uint   `json:"medical_record_id"`
 	VetID           uint   `json:"vet_id"`
 }

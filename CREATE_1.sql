@@ -81,7 +81,7 @@ COMMENT ON COLUMN medical_record.pet_id IS 'Ссылка на питомца';
 
 CREATE TABLE IF NOT EXISTS device (
     id INTEGER PRIMARY KEY DEFAULT nextval('device_id_seq'),
-    information VARCHAR(100),
+    unique_number VARCHAR(100),
     status VARCHAR(50) NOT NULL
 );
 
@@ -112,5 +112,3 @@ COMMENT ON COLUMN medical_entry.recommendation IS 'Рекомендации';
 COMMENT ON COLUMN medical_entry.medical_record_id IS 'Ссылка на медкарту';
 COMMENT ON COLUMN medical_entry.device_number IS 'Номер устройства';
 COMMENT ON COLUMN medical_entry.veterinarian_id IS 'Идентификатор ветеринара';
-
-

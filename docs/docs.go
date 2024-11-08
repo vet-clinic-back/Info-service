@@ -66,7 +66,16 @@ const docTemplate = `{
                     "200": {
                         "description": "Successfully retrieved pets",
                         "schema": {
-                            "$ref": "#/definitions/models.OutputPetDTO"
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.OutputPetDTO"
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not found in db",
+                        "schema": {
+                            "$ref": "#/definitions/models.ErrorDTO"
                         }
                     },
                     "500": {
@@ -283,6 +292,79 @@ const docTemplate = `{
             }
         },
         "/info/v1/record/entries": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Creates a new med entry",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "MedEntry"
+                ],
+                "summary": "getEntries",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Entry ID",
+                        "name": "entry_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Pet ID",
+                        "name": "pet_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "offset",
+                        "name": "offset",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "limit",
+                        "name": "limit",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully created утекн",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.MedicalEntry"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "failed to parse filters",
+                        "schema": {
+                            "$ref": "#/definitions/models.ErrorDTO"
+                        }
+                    },
+                    "404": {
+                        "description": "Not found",
+                        "schema": {
+                            "$ref": "#/definitions/models.ErrorDTO"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/models.ErrorDTO"
+                        }
+                    }
+                }
+            },
             "post": {
                 "security": [
                     {

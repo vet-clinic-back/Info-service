@@ -23,6 +23,7 @@ type Info interface {
 
 type MedInfo interface {
 	CreateMedEntry(entry models.MedicalEntry) (uint, error)
+	GetMedEntries(models.EntryReqFilter) ([]models.MedicalEntry, error)
 }
 
 type Service struct {

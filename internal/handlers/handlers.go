@@ -48,7 +48,7 @@ func (h *Handler) InitRoutes() *gin.Engine {
 			{
 				entries := medCard.Group("/entries")
 				{
-					entries.GET("/", func(context *gin.Context) {})
+					entries.GET("/", h.getEntries)
 					entries.POST("/", h.createEntry)
 					entries.DELETE("/", func(context *gin.Context) {})
 				}

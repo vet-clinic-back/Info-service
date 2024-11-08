@@ -117,7 +117,13 @@ paths:
         "200":
           description: Successfully retrieved pets
           schema:
-            $ref: '#/definitions/models.OutputPetDTO'
+            items:
+              $ref: '#/definitions/models.OutputPetDTO'
+            type: array
+        "404":
+          description: Not found in db
+          schema:
+            $ref: '#/definitions/models.ErrorDTO'
         "500":
           description: Internal server error
           schema:
@@ -259,6 +265,53 @@ paths:
       tags:
       - pets
   /info/v1/record/entries:
+    get:
+      consumes:
+      - application/json
+      description: Creates a new med entry
+      parameters:
+      - description: Entry ID
+        in: query
+        name: entry_id
+        type: integer
+      - description: Pet ID
+        in: query
+        name: pet_id
+        type: integer
+      - description: offset
+        in: query
+        name: offset
+        type: integer
+      - description: limit
+        in: query
+        name: limit
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successfully created утекн
+          schema:
+            items:
+              $ref: '#/definitions/models.MedicalEntry'
+            type: array
+        "400":
+          description: failed to parse filters
+          schema:
+            $ref: '#/definitions/models.ErrorDTO'
+        "404":
+          description: Not found
+          schema:
+            $ref: '#/definitions/models.ErrorDTO'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/models.ErrorDTO'
+      security:
+      - ApiKeyAuth: []
+      summary: getEntries
+      tags:
+      - MedEntry
     post:
       consumes:
       - application/json

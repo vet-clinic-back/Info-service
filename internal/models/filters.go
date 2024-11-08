@@ -8,3 +8,10 @@ type PetReqFilter struct {
 	Limit   *uint `json:"limit"`
 	Offset  *uint `json:"offset"`
 }
+
+type EntryReqFilter struct {
+	PetID   *uint `json:"pet_id"`
+	EntryID *uint `json:"entry_id"`
+	Limit   *uint `json:"limit"`
+	Offset  *uint `json:"offset"`
+}

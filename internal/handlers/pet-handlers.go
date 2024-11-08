@@ -42,10 +42,10 @@ func (h *Handler) createPet(c *gin.Context) {
 	}
 
 	log.Debug("validating input")
-	if err := http_utils.ValidateCreatingPetDTO(input.Pet); err != nil {
-		log.Error("failed to validate input: ", err.Error())
+	if err := http_utils.ValidateCreatingPetDTO(input.Pet); err != nil || input.OwnerID == 0 || input.VetID == 0 {
+		log.Error("failed to validate input")
 		h.newErrorResponse(c, http.StatusBadRequest, "invalid input body. Age & weight should be > 0 & Gender "+
-			"should be 'Male' or 'Female'")
+			"should be 'Male' or 'Female' & vetID with ownerID are required")
 		return
 	}
 
@@ -110,7 +110,8 @@ func (h *Handler) getPet(c *gin.Context) {
 // @Param offset query int false "offset"
 // @Param limit query int false "limit"
 // @Produce json
-// @Success 200 {object} models.OutputPetDTO "Successfully retrieved pets"
+// @Success 200 {object} []models.OutputPetDTO "Successfully retrieved pets"
+// @Failure 404 {object} models.ErrorDTO "Not found in db"
 // @Failure 500 {object} models.ErrorDTO "Internal server error"
 // @Router  /info/v1/pets [get]
 func (h *Handler) getPets(c *gin.Context) {
