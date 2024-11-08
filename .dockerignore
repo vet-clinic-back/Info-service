@@ -1,0 +1,6 @@
+.idea
+.git
+docker-compose.yaml
+pet.txt
+README.md
+test.sql
