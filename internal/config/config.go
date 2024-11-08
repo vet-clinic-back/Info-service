@@ -2,11 +2,8 @@ package config
 
 import (
 	"errors"
-	"fmt"
 	"os"
 	"sync"
-
-	"github.com/joho/godotenv"
 )
 
 // use "github.com/ilyakaznacheev/cleanenv" to read yaml
@@ -30,18 +27,21 @@ var config *Config
 var once sync.Once
 
 func NewConfig() (*Config, error) {
-	errorStr := ""
-	once.Do(func() {
-		config = &Config{}
-		err := godotenv.Load(".env")
-		if err != nil {
-			errorStr += fmt.Sprintf("Config error raised- %s;", err.Error())
-			return
-		}
-	})
-	if errorStr != "" {
-		return &Config{}, errors.New(errorStr)
-	}
+	//errorStr := ""
+	//once.Do(func() {
+	//	config = &Config{}
+	//	err := godotenv.Load(".env")
+	//	if err != nil {
+	//		errorStr += fmt.Sprintf("Config error raised- %s;", err.Error())
+	//		return
+	//	}
+	//})
+	//
+	//if errorStr != "" {
+	//	return &Config{}, errors.New(errorStr)
+	//}
+
+	config = &Config{}
 
 	if config.Db.Host = os.Getenv("DB_HOST"); config.Db.Host == "" {
 		return &Config{}, errors.New("DB_HOST is empty")
