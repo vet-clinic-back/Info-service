@@ -42,7 +42,7 @@ func (h *Handler) createPet(c *gin.Context) {
 	}
 
 	log.Debug("validating input")
-	if err := http_utils.ValidateCreatingPetDTO(input.Pet); err != nil || input.OwnerID == 0 || input.VetID == 0 {
+	if err := http_utils.ValidateCreatingPetDTO(input.Pet); err != nil {
 		log.Error("failed to validate input")
 		h.newErrorResponse(c, http.StatusBadRequest, "invalid input body. Age & weight should be > 0 & Gender "+
 			"should be 'Male' or 'Female' & vetID with ownerID are required")
